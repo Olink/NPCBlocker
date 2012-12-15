@@ -58,16 +58,16 @@ namespace NPCBlocker
 
         public override void Initialize()
         {
+            TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", AddNpc, "blacknpc"));
+            TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", DelNpc, "whitenpc"));
             NpcHooks.SpawnNpc += OnSpawn;
-            Start();
+            StartDB();
         }
 
-        public void Start()
+        public void StartDB()
         {
             SetupDb();
             ReadDb();
-            Commands.ChatCommands.Add(new Command("resnpc", AddNpc, "blackNPC"));
-            Commands.ChatCommands.Add(new Command("resnpc", DelNpc, "whiteNPC"));
         }
 
         private void SetupDb()
