@@ -16,16 +16,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using Hooks;
 using Mono.Data.Sqlite;
 using MySql.Data.MySqlClient;
+using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.DB;
 using Terraria;
 
 namespace NPCBlocker
 {
-    [APIVersion(1, 12)]
+    [ApiVersion(1, 14)]
     public class NPCBlocker : TerrariaPlugin
     {
         private IDbConnection db;
@@ -60,7 +60,7 @@ namespace NPCBlocker
         {
             TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", AddNpc, "blacknpc"));
             TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", DelNpc, "whitenpc"));
-            NpcHooks.SpawnNpc += OnSpawn;
+            ServerApi.Hooks.NpcSpawn.Register(this, OnSpawn);
             StartDB();
         }
 
@@ -186,7 +186,7 @@ namespace NPCBlocker
         {
             if (disposing)
             {
-                NpcHooks.SpawnNpc -= OnSpawn;
+				ServerApi.Hooks.NpcSpawn.Deregister(this, OnSpawn);
             }
 
             base.Dispose(disposing);
