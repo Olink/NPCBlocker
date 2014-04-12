@@ -25,7 +25,7 @@ using Terraria;
 
 namespace NPCBlocker
 {
-    [ApiVersion(1, 14)]
+    [ApiVersion(1, 15)]
     public class NPCBlocker : TerrariaPlugin
     {
         private IDbConnection db;
