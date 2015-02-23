@@ -25,7 +25,7 @@ using Terraria;
 
 namespace NPCBlocker
 {
-    [ApiVersion(1, 14)]
+    [ApiVersion(1, 16)]
     public class NPCBlocker : TerrariaPlugin
     {
         private IDbConnection db;
@@ -198,6 +198,7 @@ namespace NPCBlocker
                 return;
             if (blockedNPC.Contains(args.Npc.netID))
             {
+	            args.Npc.active = false;
                 args.Handled = true;
                 return;
             }
