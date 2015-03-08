@@ -25,7 +25,7 @@ using Terraria;
 
 namespace NPCBlocker
 {
-    [ApiVersion(1, 16)]
+    [ApiVersion(1, 17)]
     public class NPCBlocker : TerrariaPlugin
     {
         private IDbConnection db;
@@ -42,7 +42,7 @@ namespace NPCBlocker
 
         public override string Author
         {
-            get { return "Zack Piispanen"; }
+            get { return "Olink"; }
         }
 
         public override string Description
@@ -61,6 +61,7 @@ namespace NPCBlocker
             TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", AddNpc, "blacknpc"));
             TShockAPI.Commands.ChatCommands.Add(new Command("resnpc", DelNpc, "whitenpc"));
             ServerApi.Hooks.NpcSpawn.Register(this, OnSpawn);
+			ServerApi.Hooks.NpcTransform.Register(this, OnTransform);
             StartDB();
         }
 
@@ -192,15 +193,25 @@ namespace NPCBlocker
             base.Dispose(disposing);
         }
 
+	    private void OnTransform(NpcTransformationEventArgs args)
+	    {
+			if (args.Handled)
+				return;
+			if (blockedNPC.Contains(Main.npc[args.NpcId].netID))
+			{
+				Main.npc[args.NpcId].active = false;
+			}
+	    }
+
         private void OnSpawn( NpcSpawnEventArgs args)
         {
             if (args.Handled)
                 return;
-            if (blockedNPC.Contains(args.Npc.netID))
-            {
-	            args.Npc.active = false;
-                args.Handled = true;
-                return;
+			if (blockedNPC.Contains(Main.npc[args.NpcId].netID))
+			{
+				args.Handled = true;
+				Main.npc[args.NpcId].active = false;
+	            args.NpcId = 200;
             }
         }
     }
